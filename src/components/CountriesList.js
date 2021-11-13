@@ -7,6 +7,7 @@ let selectCountry;
 let bgColor;
 let color;
 let listaFiltrada;
+let timer;
 
 function CountriesList() {
   const [newCountries, setNewCountries] = useState(countries);
@@ -18,10 +19,12 @@ function CountriesList() {
     setNewCountries(listCountries);
   }
 
-  //Condição de busca de país
+  function handleChange(word) {
+    setSearch(word);
+  }
+
   if (search) {
     const re = new RegExp(`${search}`, 'gi');
-
     listaFiltrada = [];
     listCountries.forEach((currentCountry) => {
       if (currentCountry.name.common.match(re) !== null) {
@@ -36,7 +39,10 @@ function CountriesList() {
     <div className="list-group">
       <div className="mb-3 mt-1">
         <input
-          onChange={(event) => setSearch(event.target.value)}
+          onChange={(event) => {
+            clearTimeout(timer);
+            timer = setTimeout(() => handleChange(event.target.value), 700);
+          }}
           type="text"
           className="form-control"
           placeholder="Search country"
